@@ -1,0 +1,74 @@
+import { ThemeProvider } from 'styled-components';
+import { useRef, useState, useEffect } from 'react';
+import { LocomotiveScrollProvider } from 'react-locomotive-scroll';
+import 'locomotive-scroll/dist/locomotive-scroll.css';
+import { AnimatePresence } from 'framer-motion';
+
+import GlobalStyles from './styles/GlobalStyles';
+import { dark } from './styles/Themes';
+import Home from './components/sections/Home';
+import About from './components/sections/About';
+import Second from './components/sections/Second';
+import ScrollTriggerProxy from './components/ScrollTriggerProxy';
+import Banner from './components/sections/Banner';
+import Third from './components/sections/Third';
+import Footer from './components/sections/Footer';
+import Loader from './components/Loader';
+
+const App = () => {
+  const containerRef = useRef(null);
+
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoaded(true);
+    }, 3000);
+  }, []);
+
+  return (
+    <>
+      <GlobalStyles />
+      <ThemeProvider theme={dark}>
+        <LocomotiveScrollProvider
+          options={{
+            smooth: true,
+            smartphone: {
+              smooth: true,
+            },
+            tablet: {
+              smooth: true,
+            },
+          }}
+          watch={
+            [
+
+            ]
+          }
+          containerRef={containerRef}
+        >
+          <AnimatePresence>
+            {loaded ? null : <Loader />}
+          </AnimatePresence>
+          <ScrollTriggerProxy />
+          <AnimatePresence>
+            <main
+              className="App"
+              data-scroll-container
+              ref={containerRef}
+            >
+              <Home />
+              <About />
+              <Second />
+              <Banner />
+              <Third />
+              <Footer />
+            </main>
+          </AnimatePresence>
+        </LocomotiveScrollProvider>
+      </ThemeProvider>
+    </>
+  );
+};
+
+export default App;
